@@ -33,27 +33,25 @@ public class UserService {
     }
 
     private void validateFields(CreateUserDto createUserDto) {
-        String username = createUserDto.username();
-        String password = createUserDto.password();
+        if (createUserDto != null) {
+            String username = Optional.ofNullable(createUserDto.username()).orElse("").trim();
+            String password = Optional.ofNullable(createUserDto.password()).orElse("").trim();
 
-        boolean isUsernameEmpty = username == null || username.trim().isEmpty();
-        boolean isPasswordEmpty = password == null || password.trim().isEmpty();
-
-        if (isUsernameEmpty && isPasswordEmpty) {
-            throw new UserExceptions.EmptyFieldException();
-        }
-        if (isUsernameEmpty) {
-            throw new UserExceptions.EmptyFieldException("username");
-        }
-        if (isPasswordEmpty) {
-            throw new UserExceptions.EmptyFieldException("password");
-        }
-        if (password.length() < 6) {
-            throw new UserExceptions.PasswordTooShortException();
-        }
-
-        if (password.length() > 16) {
-            throw new UserExceptions.PasswordTooLongException();
+            if (username.isEmpty() && password.isEmpty()) {
+                throw new UserExceptions.EmptyFieldException();
+            }
+            if (username.isEmpty()) {
+                throw new UserExceptions.EmptyFieldException("username");
+            }
+            if (password.isEmpty()) {
+                throw new UserExceptions.EmptyFieldException("password");
+            }
+            if (password.length() < 6) {
+                throw new UserExceptions.PasswordTooShortException();
+            }
+            if (password.length() > 16) {
+                throw new UserExceptions.PasswordTooLongException();
+            }
         }
     }
 
@@ -71,8 +69,7 @@ public class UserService {
 
         validateUser(entity);
 
-        var userSaved = userRepository.save(entity);
-        return userSaved.getId();
+        return userRepository.save(entity).getId();
     }
 
     public User findUserById(Long id) {
@@ -81,23 +78,33 @@ public class UserService {
     }
 
     public void deleteUserById(Long id) {
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
+        // Verifica se o usuário existe; se não, lança uma exceção
+        if (!userRepository.existsById(id)) {
+            throw new UserExceptions.UserNotFoundException(id);
         }
+
+        userRepository.deleteById(id); // Deleta o usuário
     }
 
     public void updateUserById(Long id, UpdateUserDto updateUserDto) {
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new UserExceptions.UserNotFoundException(id));
 
-        if (updateUserDto.username() != null) {
-            user.setUsername(updateUserDto.username());
-        }
-        if (updateUserDto.password() != null) {
-            user.setPassword(updateUserDto.password());
-        }
+        // Atualiza o nome de usuário se fornecido
+        Optional.ofNullable(updateUserDto.username())
+                .ifPresent(user::setUsername);
+        // Atualiza a senha se fornecida
+        Optional.ofNullable(updateUserDto.password())
+                .ifPresent(user::setPassword);
 
+        // Valida os campos atualizados
+        validateFields(new CreateUserDto(user.getUsername(), user.getEmail(), user.getPassword()));
+
+        // Valida o usuário após a atualização
         validateUser(user);
+
+        // Salva as alterações
         userRepository.save(user);
     }
+
 }
