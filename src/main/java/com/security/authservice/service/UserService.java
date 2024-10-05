@@ -6,7 +6,9 @@ import com.security.authservice.repository.UserRepository;
 
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.time.Instant;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -27,5 +29,10 @@ public class UserService {
         var userSaved = userRepository.save(entity);
 
         return userSaved.getId();
+    }
+
+    public Optional<User> findUserById(Long id) {
+        return userRepository.findById(id);
+
     }
 }
