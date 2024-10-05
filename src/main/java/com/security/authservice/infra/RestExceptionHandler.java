@@ -33,6 +33,31 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 
+    // Trata erros de campo vazio
+    @ExceptionHandler(UserExceptions.EmptyFieldException.class)
+    public ResponseEntity<Object> handleEmptyFieldException(UserExceptions.EmptyFieldException ex, WebRequest request) {
+        Map<String, String> body = new HashMap<>();
+        body.put("error", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    // Trata o caso de senha muito curta
+    @ExceptionHandler(UserExceptions.PasswordTooShortException.class)
+    public ResponseEntity<Object> handlePasswordTooShortException(UserExceptions.PasswordTooShortException ex, WebRequest request) {
+        Map<String, String> body = new HashMap<>();
+        body.put("error", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(UserExceptions.PasswordTooLongException.class)
+    public ResponseEntity<Object> handlePasswordTooLongException(UserExceptions.PasswordTooLongException ex, WebRequest request) {
+        Map<String, String> body = new HashMap<>();
+        body.put("error", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+
     // Trata erros de validação de dados
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleValidationExceptions(ConstraintViolationException ex, WebRequest request) {

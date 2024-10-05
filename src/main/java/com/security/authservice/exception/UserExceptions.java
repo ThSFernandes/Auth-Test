@@ -13,4 +13,27 @@ public class UserExceptions {
             super("O e-mail " + email + " já está em uso.");
         }
     }
+
+    public static class EmptyFieldException extends RuntimeException {
+        public EmptyFieldException(String field) {
+            super("O campo " + field + " não pode estar vazio.");
+        }
+
+        public EmptyFieldException() {
+            super("Os campos username e password não podem estar vazios.");
+        }
+    }
+
+    public static class PasswordTooShortException extends RuntimeException {
+        public PasswordTooShortException() {
+            super("A senha deve ter pelo menos 6 caracteres.");
+        }
+    }
+
+
+    public static class PasswordTooLongException extends RuntimeException {
+        public PasswordTooLongException() {
+            super("A senha comporta apenas 16 caracteres.");
+        }
+    }
 }
