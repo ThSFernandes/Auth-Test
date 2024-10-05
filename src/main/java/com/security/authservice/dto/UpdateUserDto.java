@@ -1,4 +1,9 @@
 package com.security.authservice.dto;
 
-public record UpdateUserDto(String username, String password) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record UpdateUserDto(
+        @NotBlank(message = "Nome de usuário obrigatório") String username,
+        @Size(min = 6, message = "Senha teve ter pelo menos 6 caracteres") String password) {
 }

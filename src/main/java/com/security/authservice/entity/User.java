@@ -1,6 +1,9 @@
 package com.security.authservice.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -22,14 +25,19 @@ public class User {
     private Long id;
 
     @Column(name = "name", nullable = false)
+    @NotBlank(message = "Nome de usuário é obrigatório")
     @NonNull
     private String username;
 
     @Column(name = "email", nullable = false, unique = true)
+    @NotBlank(message = "Email é obrigatório")
+    @Email(message = "Email deve ser válido")
     @NonNull
     private String email;
 
     @Column(name = "password", nullable = false)
+    @NotBlank(message = "Senha é obrigatória")
+    @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres")
     @NonNull
     private String password;
 

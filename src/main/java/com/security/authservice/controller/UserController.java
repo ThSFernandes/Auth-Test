@@ -30,15 +30,15 @@ public class UserController {
     @GetMapping("{userId}")
     public ResponseEntity<User> getUserById(@PathVariable Long userId) {
         var user = userService.findUserById(userId);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             return ResponseEntity.ok(user.get());
-        }else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping({"/{userId}"})
-    public ResponseEntity<Void> deleteUserById(@PathVariable ("userId") Long userId) {
+    public ResponseEntity<Void> deleteUserById(@PathVariable("userId") Long userId) {
         userService.deleteUserById(userId);
         return ResponseEntity.noContent().build();
     }
