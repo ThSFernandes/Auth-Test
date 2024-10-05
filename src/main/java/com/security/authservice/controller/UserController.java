@@ -34,4 +34,17 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @DeleteMapping({"/{userId}"})
+    public ResponseEntity<Void> deleteUserById(@PathVariable ("userId") Long userId) {
+        userService.deleteUserById(userId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping({"/{userId}"})
+    public ResponseEntity<Void> updateByUserId(@PathVariable("userId") Long userId,
+                                               @RequestBody UpdateUserDto updateUserDto) {
+        userService.updateUserById(userId, updateUserDto);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -1,6 +1,7 @@
 package com.security.authservice.service;
 
 import com.security.authservice.controller.CreateUserDto;
+import com.security.authservice.controller.UpdateUserDto;
 import com.security.authservice.entity.User;
 import com.security.authservice.repository.UserRepository;
 
@@ -33,6 +34,33 @@ public class UserService {
 
     public Optional<User> findUserById(Long id) {
         return userRepository.findById(id);
+
+    }
+
+    public void deleteUserById(Long id) {
+        var userExists = userRepository.existsById(id);
+
+        if (userExists) {
+            userRepository.deleteById(id);
+        }
+    }
+
+    public void updateUserById(Long id, UpdateUserDto updateUserDto) {
+        var userEntity = userRepository.findById(id);
+
+        if(userEntity.isPresent()) {
+            var user = userEntity.get();
+
+            if(updateUserDto.username() != null) {
+                user.setUsername(updateUserDto.username());
+
+            }
+
+            if(updateUserDto.password() != null) {
+                user.setPassword(updateUserDto.password());
+            }
+            userRepository.save(user);
+        }
 
     }
 }
