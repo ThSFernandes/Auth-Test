@@ -1,14 +1,12 @@
 package com.security.authservice.service;
 
-import com.security.authservice.controller.CreateUserDto;
-import com.security.authservice.controller.UpdateUserDto;
+import com.security.authservice.dto.CreateUserDto;
+import com.security.authservice.dto.UpdateUserDto;
 import com.security.authservice.entity.User;
 import com.security.authservice.repository.UserRepository;
 
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
-import java.time.Instant;
 import java.util.Optional;
 
 @Service
