@@ -1,7 +1,6 @@
-package com.security.authservice.infra;
+package com.security.authservice.exception;
 
 
-import com.security.authservice.exception.UserExceptions;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
