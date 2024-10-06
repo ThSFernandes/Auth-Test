@@ -8,6 +8,7 @@ import com.security.authservice.repository.UserRepository;
 
 import jakarta.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,11 +19,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final Validator validator;
+    private final PasswordEncoder passwordEncoder;  // Injetando PasswordEncoder
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.validator = Validation.buildDefaultValidatorFactory().getValidator();
+        this.passwordEncoder = passwordEncoder;  // Inicializando PasswordEncoder
     }
 
     private void validateUser(User user) {
@@ -65,7 +68,9 @@ public class UserService {
         var entity = new User();
         entity.setName(createUserDto.username());
         entity.setEmail(createUserDto.email());
-        entity.setPassword(createUserDto.password());
+
+        // Codificando a senha antes de salvar
+        entity.setPassword(passwordEncoder.encode(createUserDto.password()));
 
         validateUser(entity);
 
@@ -78,32 +83,26 @@ public class UserService {
     }
 
     public void deleteUserById(Long id) {
-        // Verifica se o usuário existe; se não, lança uma exceção
         if (!userRepository.existsById(id)) {
             throw new UserExceptions.UserNotFoundException(id);
         }
 
-        userRepository.deleteById(id); // Deleta o usuário
+        userRepository.deleteById(id);
     }
 
     public void updateUserById(Long id, UpdateUserDTO updateUserDto) {
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new UserExceptions.UserNotFoundException(id));
 
-        // Atualiza o nome de usuário se fornecido
         Optional.ofNullable(updateUserDto.username())
                 .ifPresent(user::setName);
-        // Atualiza a senha se fornecida
         Optional.ofNullable(updateUserDto.password())
                 .ifPresent(user::setPassword);
 
-        // Valida os campos atualizados
         validateFields(new CreateUserDTO(user.getName(), user.getEmail(), user.getPassword()));
 
-        // Valida o usuário após a atualização
         validateUser(user);
-
-        // Salva as alterações
+        
         userRepository.save(user);
     }
 
