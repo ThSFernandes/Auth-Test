@@ -1,14 +1,11 @@
 package com.security.authservice.controller;
 
-
-import com.security.authservice.dto.CreateUserDTO;
 import com.security.authservice.dto.UpdateUserDTO;
 import com.security.authservice.entity.User;
 import com.security.authservice.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 
 @RestController
 @RequestMapping("/user")
@@ -21,13 +18,11 @@ public class UserController {
     }
 
 
-
     @GetMapping("{userId}")
     public ResponseEntity<User> getUserById(@PathVariable Long userId) {
         var user = userService.findUserById(userId);
         return ResponseEntity.ok(user);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
