@@ -63,7 +63,7 @@ public class UserService {
         validateFields(createUserDto);
 
         var entity = new User();
-        entity.setUsername(createUserDto.username());
+        entity.setName(createUserDto.username());
         entity.setEmail(createUserDto.email());
         entity.setPassword(createUserDto.password());
 
@@ -92,13 +92,13 @@ public class UserService {
 
         // Atualiza o nome de usuário se fornecido
         Optional.ofNullable(updateUserDto.username())
-                .ifPresent(user::setUsername);
+                .ifPresent(user::setName);
         // Atualiza a senha se fornecida
         Optional.ofNullable(updateUserDto.password())
                 .ifPresent(user::setPassword);
 
         // Valida os campos atualizados
-        validateFields(new CreateUserDto(user.getUsername(), user.getEmail(), user.getPassword()));
+        validateFields(new CreateUserDto(user.getName(), user.getEmail(), user.getPassword()));
 
         // Valida o usuário após a atualização
         validateUser(user);

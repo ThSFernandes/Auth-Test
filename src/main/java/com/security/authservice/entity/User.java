@@ -27,7 +27,7 @@ public class User {
     @Column(name = "name", nullable = false)
     @NotBlank(message = "Nome de usuário é obrigatório")
     @NonNull
-    private String username;
+    private String name;
 
     @Column(name = "email", nullable = false, unique = true)
     @NotBlank(message = "Email é obrigatório")

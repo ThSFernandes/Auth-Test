@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:h2:mem:mydb
-    username: admin //Apenas teste
-    password: admin //Apenas teste
+    username: admin
+    password: admin
     driverClassName: org.h2.Driver
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
@@ -10,5 +10,5 @@ spring:
 
 api:
   security:
-    token:
-      secret: "ChaveSecreta" //Apenas teste
+      token:
+        secret: "ChaveSecreta"
