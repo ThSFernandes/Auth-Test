@@ -49,12 +49,17 @@ public class UserService {
             if (password.isEmpty()) {
                 throw new UserExceptions.EmptyFieldException("password");
             }
-            if (password.length() < 6) {
-                throw new UserExceptions.PasswordTooShortException();
-            }
-            if (password.length() > 16) {
-                throw new UserExceptions.PasswordTooLongException();
-            }
+            // Removemos a validação do comprimento da senha daqui
+        }
+    }
+
+    // Método auxiliar para validar a senha
+    private void validatePassword(String password) {
+        if (password.length() < 6) {
+            throw new UserExceptions.PasswordTooShortException();
+        }
+        if (password.length() > 16) {
+            throw new UserExceptions.PasswordTooLongException();
         }
     }
 
@@ -64,6 +69,7 @@ public class UserService {
         }
 
         validateFields(createUserDto);
+        validatePassword(createUserDto.password()); // Valida a senha antes de codificá-la
 
         var entity = new User();
         entity.setName(createUserDto.username());
@@ -94,16 +100,24 @@ public class UserService {
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new UserExceptions.UserNotFoundException(id));
 
+        // Atualiza o nome do usuário, se fornecido
         Optional.ofNullable(updateUserDto.username())
                 .ifPresent(user::setName);
+
+        // Valida a senha antes de criptografá-la e atualiza, se fornecida
         Optional.ofNullable(updateUserDto.password())
-                .ifPresent(user::setPassword);
+                .ifPresent(password -> {
+                    validatePassword(password);  // Valida a nova senha
+                    user.setPassword(passwordEncoder.encode(password));  // Criptografa e atualiza a senha
+                });
 
-        validateFields(new CreateUserDTO(user.getName(), user.getEmail(), user.getPassword()));
+        // Valida o restante dos campos, exceto a senha já criptografada
+        validateFields(new CreateUserDTO(user.getName(), user.getEmail(), updateUserDto.password()));  // Valida os campos
 
+        // Valida o usuário (exceto a senha, pois ela já foi validada)
         validateUser(user);
-        
+
+        // Salva o usuário atualizado
         userRepository.save(user);
     }
-
 }
