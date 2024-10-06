@@ -1,7 +1,7 @@
 package com.security.authservice.service;
 
-import com.security.authservice.dto.CreateUserDto;
-import com.security.authservice.dto.UpdateUserDto;
+import com.security.authservice.dto.CreateUserDTO;
+import com.security.authservice.dto.UpdateUserDTO;
 import com.security.authservice.entity.User;
 import com.security.authservice.exception.UserExceptions;
 import com.security.authservice.repository.UserRepository;
@@ -32,7 +32,7 @@ public class UserService {
         }
     }
 
-    private void validateFields(CreateUserDto createUserDto) {
+    private void validateFields(CreateUserDTO createUserDto) {
         if (createUserDto != null) {
             String username = Optional.ofNullable(createUserDto.username()).orElse("").trim();
             String password = Optional.ofNullable(createUserDto.password()).orElse("").trim();
@@ -55,7 +55,7 @@ public class UserService {
         }
     }
 
-    public Long createUser(CreateUserDto createUserDto) {
+    public Long createUser(CreateUserDTO createUserDto) {
         if (userRepository.existsByEmail(createUserDto.email())) {
             throw new UserExceptions.EmailAlreadyExistsException(createUserDto.email());
         }
@@ -86,7 +86,7 @@ public class UserService {
         userRepository.deleteById(id); // Deleta o usuário
     }
 
-    public void updateUserById(Long id, UpdateUserDto updateUserDto) {
+    public void updateUserById(Long id, UpdateUserDTO updateUserDto) {
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new UserExceptions.UserNotFoundException(id));
 
@@ -98,7 +98,7 @@ public class UserService {
                 .ifPresent(user::setPassword);
 
         // Valida os campos atualizados
-        validateFields(new CreateUserDto(user.getName(), user.getEmail(), user.getPassword()));
+        validateFields(new CreateUserDTO(user.getName(), user.getEmail(), user.getPassword()));
 
         // Valida o usuário após a atualização
         validateUser(user);

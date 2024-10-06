@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public record CreateUserDto(
+public record CreateUserDTO(
         @NotBlank(message = "Nome de usuário obrigatório") String username,
         @Size(min = 6, message = "Senha teve ter pelo menos 6 caracteres") String password,
         @NotBlank(message = "Email obrigatório")

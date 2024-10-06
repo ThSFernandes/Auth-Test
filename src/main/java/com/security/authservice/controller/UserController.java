@@ -1,8 +1,8 @@
 package com.security.authservice.controller;
 
 
-import com.security.authservice.dto.CreateUserDto;
-import com.security.authservice.dto.UpdateUserDto;
+import com.security.authservice.dto.CreateUserDTO;
+import com.security.authservice.dto.UpdateUserDTO;
 import com.security.authservice.entity.User;
 import com.security.authservice.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createuser(@RequestBody CreateUserDto createUserDto) {
+    public ResponseEntity<User> createuser(@RequestBody CreateUserDTO createUserDto) {
         var userID = userService.createUser(createUserDto);
         return ResponseEntity.created(URI.create("/users/" + userID.toString())).build();
 
@@ -42,7 +42,7 @@ public class UserController {
 
     @PutMapping({"/{userId}"})
     public ResponseEntity<Void> updateByUserId(@PathVariable("userId") Long userId,
-                                               @RequestBody UpdateUserDto updateUserDto) {
+                                               @RequestBody UpdateUserDTO updateUserDto) {
         userService.updateUserById(userId, updateUserDto);
         return ResponseEntity.noContent().build();
     }
