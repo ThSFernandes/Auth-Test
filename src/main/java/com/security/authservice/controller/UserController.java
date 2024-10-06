@@ -20,12 +20,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<User> createuser(@RequestBody CreateUserDTO createUserDto) {
-        var userID = userService.createUser(createUserDto);
-        return ResponseEntity.created(URI.create("/users/" + userID.toString())).build();
 
-    }
 
     @GetMapping("{userId}")
     public ResponseEntity<User> getUserById(@PathVariable Long userId) {
@@ -34,11 +29,12 @@ public class UserController {
     }
 
 
-    @DeleteMapping({"/{userId}"})
-    public ResponseEntity<Void> deleteUserById(@PathVariable("userId") Long userId) {
-        userService.deleteUserById(userId);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
+        userService.deleteUserById(id);
+        return ResponseEntity.noContent().build(); // Retorna 204 No Content
     }
+
 
     @PutMapping({"/{userId}"})
     public ResponseEntity<Void> updateByUserId(@PathVariable("userId") Long userId,
@@ -47,8 +43,4 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
-    public ResponseEntity<String> getUser() {
-        return ResponseEntity.ok("Sucesso");
-    }
 }
