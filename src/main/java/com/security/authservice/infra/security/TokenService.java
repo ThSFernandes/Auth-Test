@@ -25,10 +25,10 @@ public class TokenService {
                     .withSubject(user.getEmail())
                     .withExpiresAt(this.generateExpirantionDate())
                     .sign(algorithm);
+            return token;
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Erro ao tentar autenticar");
         }
-        return null;
     }
 
 
