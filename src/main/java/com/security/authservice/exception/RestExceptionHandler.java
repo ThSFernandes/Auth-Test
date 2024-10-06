@@ -32,11 +32,27 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 
+    // Trata o caso de e-mail não encontrado
+    @ExceptionHandler(UserExceptions.EmailNotFoundException.class)
+    public ResponseEntity<Object> handleEmailNotFoundException(UserExceptions.EmailNotFoundException ex, WebRequest request) {
+        Map<String, String> body = new HashMap<>();
+        body.put("error", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    // Trata o caso de senha incorreta
+    @ExceptionHandler(UserExceptions.InvalidPasswordException.class)
+    public ResponseEntity<Object> handleInvalidPasswordException(UserExceptions.InvalidPasswordException ex, WebRequest request) {
+        Map<String, String> body = new HashMap<>();
+        body.put("Erro:", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
     // Trata erros de campo vazio
     @ExceptionHandler(UserExceptions.EmptyFieldException.class)
     public ResponseEntity<Object> handleEmptyFieldException(UserExceptions.EmptyFieldException ex, WebRequest request) {
         Map<String, String> body = new HashMap<>();
-        body.put("error", ex.getMessage());
+        body.put("Erro:", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
@@ -44,7 +60,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserExceptions.PasswordTooShortException.class)
     public ResponseEntity<Object> handlePasswordTooShortException(UserExceptions.PasswordTooShortException ex, WebRequest request) {
         Map<String, String> body = new HashMap<>();
-        body.put("error", ex.getMessage());
+        body.put("Erro:", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
@@ -52,7 +68,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserExceptions.PasswordTooLongException.class)
     public ResponseEntity<Object> handlePasswordTooLongException(UserExceptions.PasswordTooLongException ex, WebRequest request) {
         Map<String, String> body = new HashMap<>();
-        body.put("error", ex.getMessage());
+        body.put("Erro:", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
@@ -73,7 +89,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Object> handleValidationException(ValidationException ex, WebRequest request) {
         Map<String, String> body = new HashMap<>();
-        body.put("error", ex.getMessage());
+        body.put("Erro:", ex.getMessage());
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
@@ -81,7 +97,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleGlobalException(Exception ex, WebRequest request) {
         Map<String, String> body = new HashMap<>();
-        body.put("error", "Erro interno do servidor. Por favor, tente novamente mais tarde.");
+        body.put("Erro:", "Erro não mapeado");
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

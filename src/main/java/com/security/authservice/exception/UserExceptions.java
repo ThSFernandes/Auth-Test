@@ -14,6 +14,18 @@ public class UserExceptions {
         }
     }
 
+    public static class InvalidPasswordException extends RuntimeException {
+        public InvalidPasswordException() {
+            super("Senha incorreta.");
+        }
+    }
+
+    public static class EmailNotFoundException extends RuntimeException {
+        public EmailNotFoundException(String email) {
+            super("Usuário com o e-mail " + email + " não foi encontrado.");
+        }
+    }
+
     public static class EmptyFieldException extends RuntimeException {
         public EmptyFieldException(String field) {
             super("O campo " + field + " não pode estar vazio.");
