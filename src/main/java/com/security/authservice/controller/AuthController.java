@@ -35,7 +35,7 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(
             summary = "Realizar Login",
-            description = "Método para realizar o login de um usuário no sistema. " +
+            description = "Método para realizar o login de um usuário no sistema." +
                     "O usuário deve fornecer um email e uma senha válidos. " +
                     "Caso o login seja bem-sucedido, um token de autenticação será retornado."
     )
