@@ -112,4 +112,6 @@ Para executar o projeto, assegure-se de que todos os pré-requisitos estão aten
 
 - [Swagger UI](http://localhost:8080/swagger-ui/index.html)
 
+## MIT LICENSE
+Este repositório está licenciado sob a MIT License. Para obter mais informações detalhadas, consulte o arquivo LICENSE localizado neste repositório.
 
