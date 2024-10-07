@@ -26,7 +26,7 @@ class CreatedUserTest {
 
     @Test
     @DisplayName("Should create and find user successfully")
-    void shouldCreateAndFindUserSuccessfully() {
+    void shouldCreateUserSuccessfully() {
         RegisterDTO data = new RegisterDTO("Thiago", "Thsalles@teste.com", "Th12345@");
         User createdUser = createFakerUser(data);
 
