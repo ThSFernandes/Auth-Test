@@ -33,13 +33,19 @@ public class AuthController {
     private final TokenService tokenService;
 
     @PostMapping("/login")
-    @Operation(summary = "Realizar Login", description = "Método para login usuário")
-    @ApiResponse(responseCode = "200", description = "usuário logado com sucesso")
-    @ApiResponse(responseCode = "400", description = "Email não cadastrado" )
-    @ApiResponse(responseCode = "500", description = "Erro no servidor")
+    @Operation(
+            summary = "Realizar Login",
+            description = "Método para realizar o login de um usuário no sistema. " +
+                    "O usuário deve fornecer um email e uma senha válidos. " +
+                    "Caso o login seja bem-sucedido, um token de autenticação será retornado."
+    )
+    @ApiResponse(responseCode = "200", description = "Usuário logado com sucesso. Retorna o nome do usuário e o token de autenticação.")
+    @ApiResponse(responseCode = "400", description = "Email ou senha inválidos. Pode ser devido a campos vazios ou dados não correspondentes.")
+    @ApiResponse(responseCode = "500", description = "Erro no servidor. Ocorreu um problema ao processar a solicitação.")
     public ResponseEntity<?> login(@RequestBody LoginDTO body) {
-        // Validações de entrada
+
         if (body.email() == null || body.email().isEmpty()) {
+
             throw new UserExceptions.EmptyFieldException("email");
         }
 
@@ -55,12 +61,11 @@ public class AuthController {
             throw new UserExceptions.PasswordTooLongException();
         }
 
-        // Tenta encontrar o usuário pelo email
         User user = this.repository.findByEmail(body.email()).orElseThrow(() ->
                 new UserExceptions.EmailNotFoundException(body.email())
         );
 
-        // Verifica se a senha está correta
+
         if (passwordEncoder.matches(body.password(), user.getPassword())) {
             String token = tokenService.generateToken(user);
             return ResponseEntity.ok(new ResponseDTO(user.getName(), token));
@@ -69,11 +74,17 @@ public class AuthController {
         return ResponseEntity.badRequest().build();
     }
 
-    @Operation(summary = "Registra usuário", description = "Método para salvar usuário")
-    @ApiResponse(responseCode = "201", description = "usuário registrado com sucesso")
-    @ApiResponse(responseCode = "400", description = "Email já cadastrado" )
-    @ApiResponse(responseCode = "500", description = "Erro no servidor")
     @PostMapping("/register")
+    @Operation(
+            summary = "Registrar Usuário",
+            description = "Método para registrar um novo usuário no sistema. " +
+                    "O usuário deve fornecer nome, email e senha. " +
+                    "Caso o registro seja bem-sucedido, um token de autenticação será retornado. " +
+                    "Se o email já estiver cadastrado, uma resposta de erro será gerada."
+    )
+    @ApiResponse(responseCode = "201", description = "Usuário registrado com sucesso. Retorna o nome do usuário e o token de autenticação.")
+    @ApiResponse(responseCode = "400", description = "Email já cadastrado ou campos obrigatórios em branco.")
+    @ApiResponse(responseCode = "500", description = "Erro no servidor. Ocorreu um problema ao processar a solicitação.")
     public ResponseEntity register(@RequestBody RegisterDTO body) {
         Optional<User> user = this.repository.findByEmail(body.email());
 
