@@ -5,8 +5,13 @@ import com.security.authservice.dto.RegisterDTO;
 import com.security.authservice.dto.ResponseDTO;
 import com.security.authservice.entity.User;
 import com.security.authservice.exception.UserExceptions;
+import com.security.authservice.infra.security.SecurityConfig;
 import com.security.authservice.infra.security.TokenService;
 import com.security.authservice.repository.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,12 +25,18 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Tag(name = "usuario", description = "Autenticação")
+@SecurityRequirement(name = SecurityConfig.SECURITY)
 public class AuthController {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
 
     @PostMapping("/login")
+    @Operation(summary = "Realizar Login", description = "Método para login usuário")
+    @ApiResponse(responseCode = "200", description = "usuário logado com sucesso")
+    @ApiResponse(responseCode = "400", description = "Email não cadastrado" )
+    @ApiResponse(responseCode = "500", description = "Erro no servidor")
     public ResponseEntity<?> login(@RequestBody LoginDTO body) {
         // Validações de entrada
         if (body.email() == null || body.email().isEmpty()) {
@@ -58,7 +69,10 @@ public class AuthController {
         return ResponseEntity.badRequest().build();
     }
 
-
+    @Operation(summary = "Registra usuário", description = "Método para salvar usuário")
+    @ApiResponse(responseCode = "201", description = "usuário registrado com sucesso")
+    @ApiResponse(responseCode = "400", description = "Email já cadastrado" )
+    @ApiResponse(responseCode = "500", description = "Erro no servidor")
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegisterDTO body) {
         Optional<User> user = this.repository.findByEmail(body.email());
