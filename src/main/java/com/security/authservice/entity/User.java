@@ -1,5 +1,6 @@
 package com.security.authservice.entity;
 
+import com.security.authservice.dto.RegisterDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -48,4 +50,10 @@ public class User {
     @UpdateTimestamp
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate;
+
+    public User(RegisterDTO data){
+        this.name = data.name();
+        this.email = data.email();
+        this.password = data.password();
+    }
 }

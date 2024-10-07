@@ -1,7 +1,7 @@
 package com.security.authservice.service;
 
-import com.security.authservice.dto.CreateUserDTO;
 import com.security.authservice.dto.UpdateUserDTO;
+import com.security.authservice.dto.RegisterDTO;
 import com.security.authservice.entity.User;
 import com.security.authservice.exception.UserExceptions;
 import com.security.authservice.repository.UserRepository;
@@ -35,9 +35,9 @@ public class UserService {
         }
     }
 
-    private void validateFields(CreateUserDTO createUserDto) {
+    private void validateFields(RegisterDTO createUserDto) {
         if (createUserDto != null) {
-            String username = Optional.ofNullable(createUserDto.username()).orElse("").trim();
+            String username = Optional.ofNullable(createUserDto.name()).orElse("").trim();
             String password = Optional.ofNullable(createUserDto.password()).orElse("").trim();
 
             if (username.isEmpty() && password.isEmpty()) {
@@ -63,24 +63,6 @@ public class UserService {
         }
     }
 
-    public Long createUser(CreateUserDTO createUserDto) {
-        if (userRepository.existsByEmail(createUserDto.email())) {
-            throw new UserExceptions.EmailAlreadyExistsException(createUserDto.email());
-        }
-
-        validateFields(createUserDto);
-        validatePassword(createUserDto.password());
-
-        var entity = new User();
-        entity.setName(createUserDto.username());
-        entity.setEmail(createUserDto.email());
-
-        entity.setPassword(passwordEncoder.encode(createUserDto.password()));
-
-        validateUser(entity);
-
-        return userRepository.save(entity).getId();
-    }
 
     public User findUserById(Long id) {
         return userRepository.findById(id)
@@ -111,7 +93,7 @@ public class UserService {
                 });
 
 
-        validateFields(new CreateUserDTO(user.getName(), user.getEmail(), updateUserDto.password()));
+        validateFields(new RegisterDTO(user.getName(), user.getEmail(), updateUserDto.password()));
         validateUser(user);
         userRepository.save(user);
     }

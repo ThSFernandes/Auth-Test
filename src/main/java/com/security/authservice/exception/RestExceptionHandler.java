@@ -16,7 +16,7 @@ import java.util.Map;
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-    // Trata o caso de usuário não encontrado
+
     @ExceptionHandler(UserExceptions.UserNotFoundException.class)
     public ResponseEntity<Object> handleUserNotFoundException(UserExceptions.UserNotFoundException ex, WebRequest request) {
         Map<String, String> body = new HashMap<>();
@@ -24,7 +24,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
-    // Trata o caso de e-mail já existente
+
     @ExceptionHandler(UserExceptions.EmailAlreadyExistsException.class)
     public ResponseEntity<Object> handleEmailAlreadyExistsException(UserExceptions.EmailAlreadyExistsException ex, WebRequest request) {
         Map<String, String> body = new HashMap<>();
@@ -32,7 +32,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 
-    // Trata o caso de e-mail não encontrado
+
     @ExceptionHandler(UserExceptions.EmailNotFoundException.class)
     public ResponseEntity<Object> handleEmailNotFoundException(UserExceptions.EmailNotFoundException ex, WebRequest request) {
         Map<String, String> body = new HashMap<>();
@@ -40,7 +40,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
-    // Trata o caso de senha incorreta
+
     @ExceptionHandler(UserExceptions.InvalidPasswordException.class)
     public ResponseEntity<Object> handleInvalidPasswordException(UserExceptions.InvalidPasswordException ex, WebRequest request) {
         Map<String, String> body = new HashMap<>();
@@ -48,7 +48,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    // Trata erros de campo vazio
+
     @ExceptionHandler(UserExceptions.EmptyFieldException.class)
     public ResponseEntity<Object> handleEmptyFieldException(UserExceptions.EmptyFieldException ex, WebRequest request) {
         Map<String, String> body = new HashMap<>();
@@ -56,7 +56,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    // Trata o caso de senha muito curta
+
     @ExceptionHandler(UserExceptions.PasswordTooShortException.class)
     public ResponseEntity<Object> handlePasswordTooShortException(UserExceptions.PasswordTooShortException ex, WebRequest request) {
         Map<String, String> body = new HashMap<>();
@@ -73,7 +73,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-    // Trata erros de validação de dados
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleValidationExceptions(ConstraintViolationException ex, WebRequest request) {
         Map<String, String> errors = new HashMap<>();
@@ -85,7 +85,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    // Trata erros genéricos de validação
+
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Object> handleValidationException(ValidationException ex, WebRequest request) {
         Map<String, String> body = new HashMap<>();
@@ -93,7 +93,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    // Trata erros genéricos
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleGlobalException(Exception ex, WebRequest request) {
         Map<String, String> body = new HashMap<>();
